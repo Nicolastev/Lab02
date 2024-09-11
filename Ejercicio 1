@@ -1,0 +1,91 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+
+public class EstadisticasArray {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        
+        //tamaño del arreglo
+        System.out.print("Ingrese el tamaño del arreglo: ");
+        int tamaño = scanner.nextInt();
+        
+        //arreglo con números aleatorios
+        int[] arreglo = new int[tamaño];
+        System.out.println("Números en el arreglo:");
+        for (int i = 0; i < tamaño; i++) {
+            arreglo[i] = random.nextInt(100); // Generar números aleatorios entre 0 y 99
+            System.out.print(arreglo[i] + " ");
+        }
+        System.out.println();
+        
+        //media
+        double media = calcularMedia(arreglo);
+        System.out.println("Media: " + media);
+        
+        //mediana
+        double mediana = calcularMediana(arreglo);
+        System.out.println("Mediana: " + mediana);
+        
+        //varianza
+        double varianza = calcularVarianza(arreglo, media);
+        System.out.println("Varianza: " + varianza);
+        
+        //desviación estándar
+        double desviacionEstandar = Math.sqrt(varianza);
+        System.out.println("Desviación estándar: " + desviacionEstandar);
+        
+        //moda
+        int moda = calcularModa(arreglo);
+        System.out.println("Moda: " + (moda == Integer.MIN_VALUE ? "No hay moda" : moda));
+        
+        scanner.close();
+    }
+
+    public static double calcularMedia(int[] arreglo) {
+        double suma = 0;
+        for (int num : arreglo) {
+            suma += num;
+        }
+        return suma / arreglo.length;
+    }
+
+    public static double calcularMediana(int[] arreglo) {
+        Arrays.sort(arreglo); // Ordenar el arreglo
+        int n = arreglo.length;
+        if (n % 2 == 0) {
+            return (arreglo[n / 2 - 1] + arreglo[n / 2]) / 2.0;
+        } else {
+            return arreglo[n / 2];
+        }
+    }
+
+    public static double calcularVarianza(int[] arreglo, double media) {
+        double suma = 0;
+        for (int num : arreglo) {
+            suma += Math.pow(num - media, 2);
+        }
+        return suma / arreglo.length;
+    }
+
+    public static int calcularModa(int[] arreglo) {
+        Map<Integer, Integer> frecuencias = new HashMap<>();
+        int maxFrecuencia = 0;
+        int moda = Integer.MIN_VALUE;
+        
+        for (int num : arreglo) {
+            frecuencias.put(num, frecuencias.getOrDefault(num, 0) + 1);
+            if (frecuencias.get(num) > maxFrecuencia) {
+                maxFrecuencia = frecuencias.get(num);
+                moda = num;
+            } else if (frecuencias.get(num) == maxFrecuencia) {
+                moda = Integer.MIN_VALUE; // No hay una moda única
+            }
+        }
+        return moda;
+    }
+}
